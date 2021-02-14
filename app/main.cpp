@@ -1,5 +1,7 @@
 #include "core/Tree.h"
 
+#include "CLI11.hpp"
+
 #include <iostream>
 #include <string>
 #include <variant>
@@ -68,11 +70,28 @@ void printTree(navi::core::Tree& tree)
     });
 }
 
-} // namespace
-
-int main()
+void printTestTree()
 {
     auto tree = generateTestTree();
     printTree(*tree);
     delete tree;
+}
+
+} // namespace
+
+int main(int argc, char** argv)
+{
+    CLI::App app{"Tree "};
+
+    std::string inputFileName = {};
+    std::string outputFileName = {};
+
+    app.add_option("-i", inputFileName);
+    app.add_option("-o", outputFileName);
+
+    app.add_flag_function("-t,--test", [](const auto&) {
+        printTestTree();
+    });
+
+    CLI11_PARSE(app, argc, argv);
 }
