@@ -1,11 +1,8 @@
 #include "core/Tree.h"
 
 #include <iostream>
-#include <stack>
 #include <string>
 #include <variant>
-
-#include <algorithm>
 
 struct printValue
 {
@@ -19,11 +16,11 @@ struct printValue
 namespace
 {
 
-navi::core::Tree generateTestTree()
+navi::core::Tree* generateTestTree()
 {
-    auto tree = navi::core::Tree();
-    tree.put(8);
-    auto bar = tree.addChild("bar");
+    auto tree = new navi::core::Tree();
+    tree->put(8);
+    auto bar = tree->addChild("bar");
 
     auto double_2_015 = bar->addChild(2.015);
     double_2_015->addChild(9);
@@ -31,7 +28,7 @@ navi::core::Tree generateTestTree()
     bar->addChild(2015);
     bar->addChild("2015");
 
-    auto baz = tree.addChild("baz");
+    auto baz = tree->addChild("baz");
 
     baz->addChild("foo");
     auto double_6_238 = baz->addChild(6.28318);
@@ -61,42 +58,14 @@ void printNodeValue(navi::core::TreeNode* root)
               << ")" << std::endl;
 }
 
-void printSubtrees(navi::core::TreeNode* root)
-{
-    printNodeValue(root);
-    for (auto& child: root->children())
-    {
-
-        printSubtrees(child);
-    }
-}
-
-void printByStack(navi::core::TreeNode* root)
-{
-    auto children = std::stack<navi::core::TreeNode*>{};
-    auto item = root;
-
-    while (item)
-    {
-        printNodeValue(item);
-        for (auto& node: item->children())
-        {
-            children.push(node);
-        }
-
-        item = children.top();
-        children.pop();
-    }
-}
-
 void printTree(navi::core::Tree& tree)
 {
+    using namespace navi::core;
     auto root = tree.getRoot();
-    printSubtrees(root);
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
-    printByStack(root);
+
+    tree::process<TreeNodeProcessor>(root, [](auto* item) {
+        printNodeValue(item);
+    });
 }
 
 } // namespace
@@ -104,5 +73,6 @@ void printTree(navi::core::Tree& tree)
 int main()
 {
     auto tree = generateTestTree();
-    printTree(tree);
+    printTree(*tree);
+    delete tree;
 }

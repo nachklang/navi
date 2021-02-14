@@ -66,7 +66,7 @@ void TreeNode::addChild(TreeNode* node)
     }
 }
 
-std::list<TreeNode*> TreeNode::children()
+const std::list<TreeNode*>& TreeNode::children() const
 {
     return m_children;
 }
@@ -79,6 +79,10 @@ TreeNode* TreeNode::parent()
 TreeValue TreeNode::getRaw()
 {
     return m_value;
+}
+
+TreeNode::~TreeNode()
+{
 }
 
 int TreeNode::spacing()

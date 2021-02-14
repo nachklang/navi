@@ -10,11 +10,11 @@ namespace core
 namespace tree
 {
 
-//Tree fromFile(const std::string& fileName)
+// Tree fromFile(const std::string& fileName)
 //{
 //}
 
-//void toFile(const std::string& fileName, const Tree& tree)
+// void toFile(const std::string& fileName, const Tree& tree)
 //{
 //}
 
@@ -46,6 +46,7 @@ void Tree::addChild(TreeNode* node)
 
 Tree::~Tree()
 {
+    tree::process<TreeNodeProcessor>(m_root, [](auto* item) { delete item; });
 }
 
 // namespace tree

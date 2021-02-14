@@ -37,7 +37,7 @@ public:
     TreeNode* addChild(const TreeValue& value);
     void addChild(TreeNode* node);
 
-    std::list<TreeNode*> children();
+    const std::list<TreeNode*>& children() const;
     TreeNode* parent();
     int spacing();
 
@@ -47,6 +47,8 @@ public:
         return std::get<Value>(m_value);
     }
     TreeValue getRaw();
+
+    ~TreeNode();
 
 private:
     void pushNode(TreeNode* child);

@@ -2,6 +2,9 @@
 
 #include "core/TreeNode.h"
 
+#include <algorithm>
+#include <functional>
+#include <stack>
 #include <string>
 #include <variant>
 
@@ -11,6 +14,7 @@ namespace navi
 namespace core
 {
 
+using TreeNodeProcessor = std::function<void(TreeNode*)>;
 
 class Tree
 {
@@ -30,8 +34,33 @@ private:
 namespace tree
 {
 
-//Tree fromFile(const std::string& fileName);
-//void toFile(const std::string& fileName, const Tree& tree);
+template <typename Processor>
+void process(TreeNode* root, const Processor& processor)
+{
+    auto children = std::stack<navi::core::TreeNode*>{};
+    auto* item = root;
+
+    while (item)
+    {
+        const auto& itemChildren = item->children();
+        std::for_each(
+            itemChildren.rbegin(),
+            itemChildren.rend(),
+            [&children](auto* child) { children.push(child); });
+
+        processor(item);
+        item = nullptr;
+
+        if (!children.empty())
+        {
+            item = children.top();
+            children.pop();
+        }
+    }
+}
+
+// Tree fromFile(const std::string& fileName);
+// void toFile(const std::string& fileName, const Tree& tree);
 
 } // namespace tree
 
