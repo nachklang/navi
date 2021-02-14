@@ -34,13 +34,12 @@ public:
     TreeNode();
 
     void put(const TreeValue& value);
-
     TreeNode* addChild(const TreeValue& value);
     void addChild(TreeNode* node);
 
     std::list<TreeNode*> children();
-
     TreeNode* parent();
+    int spacing();
 
     template <typename Value>
     Value get()
@@ -50,9 +49,13 @@ public:
     TreeValue getRaw();
 
 private:
-    TreeNode* m_parent;
+    void pushNode(TreeNode* child);
+
+private:
     std::variant<int, double, std::string> m_value;
     std::list<TreeNode*> m_children;
+    TreeNode* m_parent;
+    int m_spacing;
 };
 
 } // namespace core

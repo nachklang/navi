@@ -1,12 +1,13 @@
 #include "core/Tree.h"
 
 #include <iostream>
+#include <stack>
 #include <string>
 #include <variant>
 
 #include <algorithm>
 
-struct printVar
+struct printValue
 {
     template <typename T>
     void operator()(const T& value) const
@@ -44,30 +45,58 @@ std::string getNodeName(navi::core::TreeNode* node)
     return node->parent() == nullptr ? "Root" : "Node";
 }
 
-void printSubtrees(navi::core::TreeNode* root, int spacing)
+std::string createSpacignLine(int spacing)
 {
-    auto levelString = std::string((spacing)*2, '-');
+    return std::string((spacing)*2, '-');
+}
 
+void printNodeValue(navi::core::TreeNode* root)
+{
     auto raw = root->getRaw();
-    std::cout << levelString << getNodeName(root) << "(";
-    std::visit(printVar{}, root->getRaw());
+    std::cout << createSpacignLine(root->spacing()) << getNodeName(root) << "(";
+    std::visit(printValue{}, root->getRaw());
     std::cout << "||"
               << navi::core::tags::toString(
                      static_cast<navi::core::tags::ValueTags>(raw.index()))
               << ")" << std::endl;
+}
 
-    ++spacing;
+void printSubtrees(navi::core::TreeNode* root)
+{
+    printNodeValue(root);
     for (auto& child: root->children())
     {
 
-        printSubtrees(child, spacing);
+        printSubtrees(child);
+    }
+}
+
+void printByStack(navi::core::TreeNode* root)
+{
+    auto children = std::stack<navi::core::TreeNode*>{};
+    auto item = root;
+
+    while (item)
+    {
+        printNodeValue(item);
+        for (auto& node: item->children())
+        {
+            children.push(node);
+        }
+
+        item = children.top();
+        children.pop();
     }
 }
 
 void printTree(navi::core::Tree& tree)
 {
     auto root = tree.getRoot();
-    printSubtrees(root, 0);
+    printSubtrees(root);
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
+    printByStack(root);
 }
 
 } // namespace

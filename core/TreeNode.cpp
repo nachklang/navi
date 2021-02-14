@@ -39,7 +39,7 @@ tags::ValueTags tags::fromString(const std::string& valueAsString)
     return tagValues.at(valueAsString);
 }
 
-TreeNode::TreeNode() : m_parent(nullptr)
+TreeNode::TreeNode() : m_parent(nullptr), m_spacing(0)
 {
 }
 
@@ -51,9 +51,9 @@ void TreeNode::put(const TreeValue& value)
 TreeNode* TreeNode::addChild(const TreeValue& value)
 {
     auto child = new TreeNode();
-    child->m_parent = this;
     child->put(value);
-    m_children.push_back(child);
+
+    pushNode(child);
 
     return child;
 }
@@ -62,8 +62,7 @@ void TreeNode::addChild(TreeNode* node)
 {
     if (node != nullptr)
     {
-        node->m_parent = this;
-        m_children.push_back(node);
+        pushNode(node);
     }
 }
 
@@ -80,6 +79,18 @@ TreeNode* TreeNode::parent()
 TreeValue TreeNode::getRaw()
 {
     return m_value;
+}
+
+int TreeNode::spacing()
+{
+    return m_spacing;
+}
+
+void TreeNode::pushNode(TreeNode* child)
+{
+    child->m_parent = this;
+    child->m_spacing = m_spacing + 1;
+    m_children.push_back(child);
 }
 
 } // namespace core
