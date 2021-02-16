@@ -72,18 +72,11 @@ void printTree(navi::core::Tree& tree)
     });
 }
 
-void printTestTree()
-{
-    auto tree = generateTestTree();
-    printTree(*tree);
-    delete tree;
-}
-
 } // namespace
 
 int main(int argc, char** argv)
 {
-    CLI::App app{"Tree "};
+    CLI::App app{"Tree"};
 
     std::string inputFileName = {};
     std::string outputFileName = {};
@@ -93,24 +86,17 @@ int main(int argc, char** argv)
 
     CLI11_PARSE(app, argc, argv);
 
-    if(!inputFileName.empty() && !outputFileName.empty())
+    navi::core::Tree* tree = nullptr;
+    tree = inputFileName.empty() ? generateTestTree() :
+                                   navi::serialize::fromFile(inputFileName);
+    printTree(*tree);
+
+    if (!outputFileName.empty())
     {
-        auto tree = navi::serialize::fromFile(inputFileName);
-        printTree(*tree);
         navi::serialize::toFile(outputFileName, *tree);
-        delete tree;
     }
-    else if(!inputFileName.empty())
-    {
-        auto tree = navi::serialize::fromFile(inputFileName);
-        printTree(*tree);
-        delete tree;
-    }
-    else if(!outputFileName.empty())
-    {
-        auto tree = generateTestTree();
-        printTestTree();
-        navi::serialize::toFile(outputFileName, *tree);
-        delete tree;
-    }
+
+    delete tree;
+
+    return 0;
 }

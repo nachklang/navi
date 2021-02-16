@@ -143,6 +143,10 @@ core::Tree* fromFile(const std::string& fileName)
         }
         return tree;
     }
+    else
+    {
+        std::cout << "LOG_ERROR: Incorrect input file name" << std::endl;
+    }
 
     return nullptr;
 }

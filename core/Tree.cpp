@@ -7,19 +7,6 @@ namespace navi
 namespace core
 {
 
-namespace tree
-{
-
-// Tree fromFile(const std::string& fileName)
-//{
-//}
-
-// void toFile(const std::string& fileName, const Tree& tree)
-//{
-//}
-
-} // namespace tree
-
 Tree::Tree() : m_root(new TreeNode())
 {
 }
@@ -48,8 +35,6 @@ Tree::~Tree()
 {
     tree::process<TreeNodeProcessor>(m_root, [](auto* item) { delete item; });
 }
-
-// namespace tree
 
 } // namespace core
 
