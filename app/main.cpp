@@ -91,15 +91,26 @@ int main(int argc, char** argv)
     app.add_option("-i", inputFileName);
     app.add_option("-o", outputFileName);
 
-    app.add_flag_function("-t,--test", [](const auto&) {
-        printTestTree();
-    });
-
     CLI11_PARSE(app, argc, argv);
 
-    if(!outputFileName.empty())
+    if(!inputFileName.empty() && !outputFileName.empty())
+    {
+        auto tree = navi::serialize::fromFile(inputFileName);
+        printTree(*tree);
+        navi::serialize::toFile(outputFileName, *tree);
+        delete tree;
+    }
+    else if(!inputFileName.empty())
+    {
+        auto tree = navi::serialize::fromFile(inputFileName);
+        printTree(*tree);
+        delete tree;
+    }
+    else if(!outputFileName.empty())
     {
         auto tree = generateTestTree();
+        printTestTree();
         navi::serialize::toFile(outputFileName, *tree);
+        delete tree;
     }
 }

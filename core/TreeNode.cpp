@@ -58,12 +58,13 @@ TreeNode* TreeNode::addChild(const TreeValue& value)
     return child;
 }
 
-void TreeNode::addChild(TreeNode* node)
+TreeNode* TreeNode::addChild(TreeNode* node)
 {
     if (node != nullptr)
     {
         pushNode(node);
     }
+    return node;
 }
 
 const std::list<TreeNode*>& TreeNode::children() const

@@ -35,7 +35,7 @@ public:
 
     void put(const TreeValue& value);
     TreeNode* addChild(const TreeValue& value);
-    void addChild(TreeNode* node);
+    TreeNode* addChild(TreeNode* node);
 
     const std::list<TreeNode*>& children() const;
     TreeNode* parent();
