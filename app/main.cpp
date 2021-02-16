@@ -1,3 +1,5 @@
+#include "TreeSerializer.h"
+
 #include "core/Tree.h"
 
 #include "CLI11.hpp"
@@ -94,4 +96,10 @@ int main(int argc, char** argv)
     });
 
     CLI11_PARSE(app, argc, argv);
+
+    if(!outputFileName.empty())
+    {
+        auto tree = generateTestTree();
+        navi::serialize::toFile(outputFileName, *tree);
+    }
 }

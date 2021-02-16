@@ -59,9 +59,6 @@ void process(TreeNode* root, const Processor& processor)
     }
 }
 
-// Tree fromFile(const std::string& fileName);
-// void toFile(const std::string& fileName, const Tree& tree);
-
 } // namespace tree
 
 } // namespace core
